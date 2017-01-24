@@ -46,7 +46,6 @@ import processing.opengl.*;                     //  see note on OpenGL in void s
 import procontroll.*;
 import net.java.games.input.*;
 import processing.video.*;
-import gab.opencv.*;
 import java.awt.Rectangle;
 
 public int minBlobArea = 30;                    //   minimum target size (pixels)
