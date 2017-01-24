@@ -1,6 +1,6 @@
 INSTRUCTIONS:
 
-(These instructions assume you have already installed the 32-bit Processing 1.5.1 IDE and Arduino IDE to your 'My Documents' folder.
+(These instructions assume you have already installed the 32-bit Processing 1.5.1 IDE and Arduino IDE to your 'My Documents' folder.)
 
 Please note this program only works on Windows OS!
 
@@ -8,14 +8,10 @@ Please note this program only works on Windows OS!
 	folder 'arduino-1.0.3' and 'processing-1.5.1' are located in). If you already have folders
 	called 'Arduino' or 'Processing', then merge these with them.
 
-
-
 2) Copy dll files to windows/system, windows/system32, windows/sysWOW64
 
 3) Open "Group02_BasicTargetingSoftware_ArduinoCode.ino" in the Arduino IDE, select the proper type in
 	the "#define type" line, and upload it to your Arduino or Standalone controller.
 	You only need to do this once ever, so close the Arduino IDE.
-
-
 
 4) Finally, open "Group02_BasicTargetingSoftware.pde" in the Processing IDE. Click run, and the code should start up for you.
