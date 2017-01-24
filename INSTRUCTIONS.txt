@@ -2,7 +2,7 @@ INSTRUCTIONS:
 
 (These instructions assume you have already installed the 32-bit Processing 1.5.1 IDE and Arduino IDE to your 'My Documents' folder.
 
-
+Please note this program only works on Windows OS!
 
 1) Copy the 'Arduino' and 'Processing' folders to your 'My Documents' folder (or to whichever
 	folder 'arduino-1.0.3' and 'processing-1.5.1' are located in). If you already have folders
