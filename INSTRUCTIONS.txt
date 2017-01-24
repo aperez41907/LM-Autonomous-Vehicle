@@ -7,8 +7,13 @@ Please note this program only works on Windows OS!
 1) Copy the 'Arduino' and 'Processing' folders to your 'My Documents' folder (or to whichever
 	folder 'arduino-1.0.3' and 'processing-1.5.1' are located in). If you already have folders
 	called 'Arduino' or 'Processing', then merge these with them.
+	
+	The general layout:
+	- Documents/processing-1.5.1
+	- Documents/Arduino/Group02_BasicTargetingSoftware_ArduinoCode
+	- Documents/Processing/Group02_BasicTargetingSoftware
 
-2) Copy dll files to windows/system, windows/system32, windows/sysWOW64
+2) Copy dll files to windows/system, windows/system32, windows/sysWOW64. Processing will get angry if these dll files are missing
 
 3) Open "Group02_BasicTargetingSoftware_ArduinoCode.ino" in the Arduino IDE, select the proper type in
 	the "#define type" line, and upload it to your Arduino or Standalone controller.
