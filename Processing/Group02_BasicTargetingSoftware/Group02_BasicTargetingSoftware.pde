@@ -83,7 +83,7 @@ int possibleY = camHeight/2;
 int displayX = camWidth/2;
 int displayY = camHeight/2;
 
-int oldX = camWidth/2; // smoothing (contributed by Adam S.)
+int oldX = camWidth/2; // smoothing
 int oldY = camHeight/2; // smoothing
 int xdiff; // smoothing
 int ydiff; // smoothing
@@ -264,12 +264,6 @@ void draw() {
     fill(red(currFrame[(mouseY*width)+mouseX]), green(currFrame[(mouseY*width)+mouseX]), blue(currFrame[(mouseY*width)+mouseX]));
     rect(mouseX+2, mouseY+2, 30, 30);
   }
-
-  /*soundTimer++;
-  if (soundTimer == soundInterval) {
-    randomIdleSound();
-    soundTimer = 0;
-  }*/
 
   for (int i = 9; i >= 1; i--) {
     prevFire[i] = prevFire[i-1];
@@ -597,10 +591,6 @@ void keyReleased() {
 public void viewCameraSettings() {
   camInput.settings();
 }
-
-/*public void openWebsite() {
-  link("http://psg.rudolphlabs.com/");
-}*/
 
 public void setBackground() {
   camInput.adapt();

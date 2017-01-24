@@ -71,7 +71,7 @@ void drawControlPanel() {
   label_scanSelector.setOpaque(false);
   panel_main.add(label_scanSelector);	
 
-  label_runWithoutArduino = new GLabel(this, "No Controller", 460, 475, 120, 20);
+  label_runWithoutArduino = new GLabel(this, "No Microcontroller", 460, 475, 120, 20);
   label_runWithoutArduino.localColor.lblFont = color(0,255,0);
   label_runWithoutArduino.setBorder(0);
   label_runWithoutArduino.setOpaque(false);
@@ -219,10 +219,6 @@ void drawControlPanel() {
 
   button_selectSafeColor = new GButton(this, "Select Safe Color  ", 310, 200, 20, 10);
   panel_main.add(button_selectSafeColor);
-
-  // with image
-  /*button_openWebsite = new GButton(this, "", "Sentry_Logo_Tiny.png", 1, 545, 560, 36, 24);
-  panel_main.add(button_openWebsite);*/
 
   button_saveSettings = new GButton(this, "Save Settings", 310, 120, 120, 10);
   panel_main.add(button_saveSettings);
@@ -470,7 +466,7 @@ public void updateControlPanels() {
   }
   else {
     label_runWithoutArduino.setOpaque(false);
-    setLabelText(label_runWithoutArduino, "No Controller");
+    setLabelText(label_runWithoutArduino, "No Microcontroller");
   }
   if (connecting) {
     label_runWithoutArduino.setOpaque(true);
