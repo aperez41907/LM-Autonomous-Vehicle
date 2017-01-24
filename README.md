@@ -4,6 +4,6 @@ Project Overview: UCF students from ECE, ME, AND CS departments will coordinate 
 
 The primary requirement for the ECE group is to manufacture a custom printed circuit board with surface mounted parts.The ECE group is only required to present a targeting system that only detects color & motion and is not allowed to present the more advanced facial & object recognition software developed by the CS group.
 
-This repository contains the Basic Targeting Software that the ECE students will integrate into the custom mobile targeting system.
+This repository contains the Basic Targeting Software (under development as of January 2017) that the ECE students will integrate into the custom mobile targeting system and present at the Spring 2017 Electrical & Computer Engineering Senior Design Showcase.
 
-Link to 2017 CDR: https://1drv.ms/p/s!AtcPn9cnqqIngZNVEjDnodzNE6HdRg
+Link to 2017 ECE CDR: https://1drv.ms/p/s!AtcPn9cnqqIngZNVEjDnodzNE6HdRg
