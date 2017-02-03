@@ -111,6 +111,10 @@ configuration;
 configuration configuration1;
 
 #include <Servo.h>
+#include <Wire.h>
+#include <LIDARLite.h>
+
+LIDARLite myLidarLite;
 
 Servo pan;                            // x axis servo
 Servo tilt;                           // y axis servo
@@ -153,16 +157,22 @@ byte scanningByte;
 void setup(){
   assignPins();
 
-  pan.attach(panServoPin);             // set up the x axis servo
+  pan.attach(panServoPin);                    // set up the x axis servo
   pan.write(panServo_HomePosition);
-  tilt.attach(tiltServoPin);           // set up the y axis servo
+  tilt.attach(tiltServoPin);                  // set up the y axis servo
   tilt.write(tiltServo_HomePosition);
   
-  pinMode(electricTriggerPin, OUTPUT);     // electric trigger, set as output
+  pinMode(electricTriggerPin, OUTPUT);        // electric trigger, set as output
   digitalWrite(electricTriggerPin, LOW);
   
-  pinMode(flywheelTriggerPin, OUTPUT);
+  pinMode(flywheelTriggerPin, OUTPUT);        // flywheel trigger, set as output
   digitalWrite(flywheelTriggerPin, LOW);
+
+  //LIDAR
+  Serial.begin(9600);
+  myLidarLite.begin(0, true);
+  myLidarLite.configure(0);
+  //LIDAR
   
   pinMode(USBIndicatorLEDPin, OUTPUT);        // set up USB indicator LED
   pinMode(modeIndicatorLEDPin, OUTPUT);       // set up Mode indicator LED
@@ -171,7 +181,15 @@ void setup(){
 
 }
 
-void loop() {   
+void loop() {
+
+  //LIDAR
+  Serial.println(myLidarLite.distance()*0.0328084);
+  for(int i = 0; i < 99; i++) {
+    Serial.println(myLidarLite.distance(false)*0.0328084);
+  }
+  //LIDAR
+    
   if (Serial.available() >= 10) {       // check to see if a new set of commands is available
     watchdog = 0;
     indicator = Serial.read();         // read first byte in buffer
