@@ -4,7 +4,6 @@
  --- Based on Open-Source Material, initiated by Bob Rudolph ---
  
  A few keyboard shortcuts:
- press 'p' for a random sound effect
  press 'b' to set background image
  hold 'r' and click+drag to form a rectangle  "fire-restricted" zone
  press SPACEBAR to toggle manual/autonomous modes
@@ -67,6 +66,7 @@ int[] rawImage;
 int[] rawBackground;
 int[] currFrame;
 int[] screenPixels;
+public int range;
 public int targetX = camWidth/2;
 public int targetY = camHeight/2;
 int fire = 0;
@@ -90,6 +90,7 @@ int ydiff; // smoothing
 public float smoothingFactor = 0.8; // smoothing
 public boolean activeSmoothing = true;
 
+String strRange;
 String strTargetx;
 String strTargety;
 String fireSelector;
@@ -221,7 +222,9 @@ void draw() {
   if (!safety) {
     fire = 0;
   }
-
+  
+  strRange = "000" + str(range);
+  strRange = strRange.substring(strRange.length()-3);
   strTargetx = "000" + str(targetX);                   // make into 3-digit numbers
   strTargetx = strTargetx.substring(strTargetx.length()-3);
   strTargety = "000" + str(targetY);

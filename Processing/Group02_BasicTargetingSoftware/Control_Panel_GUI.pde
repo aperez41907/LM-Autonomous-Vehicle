@@ -8,7 +8,7 @@ import guicomponents.*;
 GPanel panel_main; // control panel
 PImage panelBackgroundImg;
 
-GLabel label_serialOut, label_targetX, label_targetY, label_fire, label_fireSelector, label_scanSelector, label_runWithoutArduino, label_xMin, label_xMax, label_yMin, label_yMax, label_setxMin, label_setxMax, label_setyMin, label_setyMax;   // text labels on control panel
+GLabel label_serialOut, label_rangeLIDAR, label_targetX, label_targetY, label_fire, label_fireSelector, label_scanSelector, label_runWithoutArduino, label_xMin, label_xMax, label_yMin, label_yMax, label_setxMin, label_setxMax, label_setyMin, label_setyMax;   // text labels on control panel
 GCheckbox checkbox_leadTarget, checkbox_showRestrictedZones, checkbox_trackingColor, checkbox_safeColor, checkbox_trackingMotion, checkbox_showDifferentPixels, checkbox_showTargetBox, checkbox_mirrorCam, checkbox_controlMode, checkbox_safety, checkbox_showCameraView, checkbox_scanWhenIdle, checkbox_soundEffects, checkbox_activeSmoothing, checkbox_useInputDevice, checkbox_useArrowKeys;// checkboxes
 GButton button_viewCameraSettings, button_setBackground, button_selectColor, button_selectSafeColor, button_openWebsite, button_playRandomSound, button_saveSettings, button_loadSettings, button_retryArduinoConnect, button_saveAndExit, button_configJoystick, button_resetCalibration, button_flipX, button_flipY;	// buttons
 GWSlider slider_tolerance, slider_trackColorTolerance, slider_safeColorTolerance, slider_safeColorMinSize, slider_minBlobArea, slider_nbDot, slider_antSens, slider_propX, slider_propY, slider_smoothingFactor; //sliders
@@ -39,6 +39,12 @@ void drawControlPanel() {
   label_serialOut.setBorder(0);
   label_serialOut.setOpaque(false);
   panel_main.add(label_serialOut);
+
+  label_rangeLIDAR = new GLabel(this, "LIDAR Range:    ", 460, 535, 120, 20);
+  label_rangeLIDAR.localColor.lblFont = color(0,255,0);
+  label_rangeLIDAR.setBorder(0);
+  label_rangeLIDAR.setOpaque(false);
+  panel_main.add(label_rangeLIDAR);
 
   label_targetX = new GLabel(this, "Pan Servo Position:    ", 310, 495, 150, 20);
   label_targetX.localColor.lblFont = color(0,255,0);
@@ -418,6 +424,7 @@ void drawControlPanel() {
 
 public void updateControlPanels() {
   setLabelText(label_serialOut, "Serial Out: " + 'a' + strTargetx + strTargety + str(fire) + fireSelector + scanSelector);
+  setLabelText(label_rangeLIDAR, "LIDAR Range: " + strRange);
   setLabelText(label_targetX, "Pan Servo Position: " + strTargetx);
   setLabelText(label_slider_tolerance, "Tolerance: " + str(tolerance));
   setLabelText(label_slider_trackColorTolerance, "Tolerance: " + str(trackColorTolerance));

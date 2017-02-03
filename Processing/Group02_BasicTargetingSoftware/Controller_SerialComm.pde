@@ -16,11 +16,11 @@ public void retryArduinoConnect() {
     println("Serial Port Count = " + len);  //print count of ports to screen
     if (len == 0) {
       runWithoutArduino = true;
-      println("no Arduino detected. Will run without Arduino. Cheers");
+      println("no Arduino detected. Will run without Arduino.");
     }
     for (i = 0; i < len; i++) {
       println("Testing port " + Serial.list()[i]);
-      arduinoPort = new Serial(this, Serial.list()[i], 4800);      // Open 1st port in list
+      arduinoPort = new Serial(this, Serial.list()[i], 4800);    // Open 1st port in list
       millisStart = millis();
       while ( (millis () - millisStart) < 2000) ;  //wait for USB port reset (Guessed at 3 secs)
       // can't use delay() call in setup()
@@ -40,7 +40,7 @@ public void retryArduinoConnect() {
         arduinoPort.stop();      //if no 'T', stop port
       if (i == len - 1) {
         runWithoutArduino = true;
-        println("no Arduino detected. Will run without Arduino. Cheers");
+        println("no Arduino detected. Will run without Arduino.");
       }
     }
     if (!runWithoutArduino) {
