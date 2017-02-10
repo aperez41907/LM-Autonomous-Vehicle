@@ -1,5 +1,6 @@
 public void retryArduinoConnect() {
   connecting = true;
+  //runWithoutArduino = false; //yo Clayton
   if (!runWithoutArduino) {
 //    try{
 //      arduinoPort.stop();
@@ -11,7 +12,7 @@ public void retryArduinoConnect() {
     long millisStart;
     int i = 0;
     int len = Serial.list().length;    //get number of ports available
-    println(Serial.list());      //print list of ports to screen
+    println(Serial.list());            //print list of ports to screen
 
     println("Serial Port Count = " + len);  //print count of ports to screen
     if (len == 0) {
@@ -22,18 +23,18 @@ public void retryArduinoConnect() {
       println("Testing port " + Serial.list()[i]);
       arduinoPort = new Serial(this, Serial.list()[i], 4800);    // Open 1st port in list
       millisStart = millis();
-      while ( (millis () - millisStart) < 2000) ;  //wait for USB port reset (Guessed at 3 secs)
+      while ( (millis () - millisStart) < 2000) ;                //wait for USB port reset (Guessed at 3 secs)
       // can't use delay() call in setup()
-      arduinoPort.clear();        // empty buffer(incase of trash)
-      arduinoPort.bufferUntil('T');                   //buffer until there is a 'T'
+      arduinoPort.clear();                                       // empty buffer(incase of trash)
+      arduinoPort.bufferUntil('T');                              //buffer until there is a 'T'
       millisStart = millis();
-      while ( (millis () - millisStart) < 100) ;  //collect some chars
-      if (arduinoPort.available() > 0)      //if we have a character
+      while ( (millis () - millisStart) < 100) ;                 //collect some chars
+      if (arduinoPort.available() > 0)                           //if we have a character
       {
-        char c = arduinoPort.readChar();  //get the character
-        if (c == 'T')        //if we got a 'T'
+        char c = arduinoPort.readChar();                         //get the character
+        if (c == 'T')                                            //if we got a 'T'
         {
-          break;        //leave for loop
+          break;                                                 //leave for loop
         }
       }
       else 

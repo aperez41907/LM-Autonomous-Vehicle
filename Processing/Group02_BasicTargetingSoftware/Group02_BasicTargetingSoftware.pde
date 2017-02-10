@@ -66,7 +66,7 @@ int[] rawImage;
 int[] rawBackground;
 int[] currFrame;
 int[] screenPixels;
-public int range;
+public int range = 0;
 public int targetX = camWidth/2;
 public int targetY = camHeight/2;
 int fire = 0;
@@ -90,7 +90,7 @@ int ydiff; // smoothing
 public float smoothingFactor = 0.8; // smoothing
 public boolean activeSmoothing = true;
 
-String strRange;
+String strRange;  //LIDAR
 String strTargetx;
 String strTargety;
 String fireSelector;
@@ -169,7 +169,7 @@ showRestrictedZones_i, showDifferentPixels_i, showTargetBox_i, showCameraView_i,
 void setup() {
   
   loadSettings();
-  
+ 
   size(camWidth, camHeight);                  // some users have reported a faster framerate when the code utilizes OpenGL. To try this, comment out this line and uncomment the line below.
   //size(camWidth, camHeight, OPENGL);
   camInput = new JMyron();
@@ -187,16 +187,22 @@ void setup() {
   target.setPosDiscrimination(true);
 
   retryArduinoConnect();
-
-  xRatio = (camWidth / (xMax - xMin));                         // used to allign sights with crosshairs on PC
-  yRatio = (camHeight/ (yMax - yMin));                         //
+  
+  String portName = Serial.list()[0];//alex
+  //arduinoPort = new Serial(this, portName, 4800);    //adding this line causes the manual comm select to not work
+  
+  //test
+  arduinoPort.bufferUntil('\n');
+  
+  xRatio = (camWidth / (xMax - xMin));               // used to allign sights with crosshairs on PC
+  yRatio = (camHeight/ (yMax - yMin));
   drawControlPanel();
 }
 
 void draw() {
-  
-  /*if (PRINT_FRAMERATE) {
-    println(frameRate);
+/*
+  if (arduinoPort.available() > 0) {
+    strRange = arduinoPort.readStringUntil('\n');
   }*/
 
   if (controlMode) {              // autonomous mode
@@ -223,9 +229,7 @@ void draw() {
     fire = 0;
   }
   
-  strRange = "000" + str(range);
-  strRange = strRange.substring(strRange.length()-3);
-  strTargetx = "000" + str(targetX);                   // make into 3-digit numbers
+  strTargetx = "000" + str(targetX);   // make into 3-digit numbers
   strTargetx = strTargetx.substring(strTargetx.length()-3);
   strTargety = "000" + str(targetY);
   strTargety = strTargety.substring(strTargety.length()-3);
@@ -290,6 +294,7 @@ void draw() {
   updateControlPanels();
   prevTargetX = targetX;
   prevTargetY = targetY;
+
 }
 
 void autonomousMode() {
