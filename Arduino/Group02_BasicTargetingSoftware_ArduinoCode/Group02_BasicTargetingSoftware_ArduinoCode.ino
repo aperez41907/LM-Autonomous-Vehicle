@@ -113,6 +113,7 @@ configuration configuration1;
 #include <Servo.h>
 #include <Wire.h>
 #include <LIDARLite.h>
+#include <SoftwareSerial.h>
 
 LIDARLite myLidarLite;
 
@@ -167,28 +168,22 @@ void setup(){
   
   pinMode(flywheelTriggerPin, OUTPUT);        // flywheel trigger, set as output
   digitalWrite(flywheelTriggerPin, LOW);
-
-  //LIDAR
-  Serial.begin(9600);
-  myLidarLite.begin(0, true);
-  myLidarLite.configure(0);
-  //LIDAR
   
   pinMode(USBIndicatorLEDPin, OUTPUT);        // set up USB indicator LED
   pinMode(modeIndicatorLEDPin, OUTPUT);       // set up Mode indicator LED
   pinMode(firingIndicatorLEDPin, OUTPUT);     // set up firing indicator LED
-  Serial.begin(4800);                     // start communication with computer
+  
+  Serial.begin(4800);                         // start communication with computer
+
+  myLidarLite.begin(0, true);   // Set configuration to default and I2C to 400 kHz
+  myLidarLite.configure(0);
 
 }
 
 void loop() {
 
-  //LIDAR
-  Serial.println(myLidarLite.distance()*0.0328084);
-  for(int i = 0; i < 99; i++) {
-    Serial.println(myLidarLite.distance(false)*0.0328084);
-  }
-  //LIDAR
+  //Serial.println(myLidarLite.distance()*0.0328084); //breaks the code
+  //delay(10);
     
   if (Serial.available() >= 10) {       // check to see if a new set of commands is available
     watchdog = 0;
@@ -229,26 +224,26 @@ void loop() {
     }
   }
   else{
+    delay(100); // delay added to improve LIDAR-processing response time //2-8
+    Serial.println(myLidarLite.distance()*0.0328084); //breaks the code //LIDAR test February 8th    2-8
     watchdog++;
     if(watchdog > watchdogTimeout) {
       idle = true;
     }
   }
   if(idle) {                          // when Arduino is not getting commands from computer...
-    Serial.write('T');                // tell the computer that Arduino is here
+    //Serial.write('T');                // tell the computer that Arduino is here
+    //delay(100); // delay added to improve LIDAR-processing response time
+    //Serial.println(myLidarLite.distance()*0.0328084); //breaks the code //LIDAR test February 8th
     idleCounter++;                              //  periodically blink the USB indicator LED
-    if(idleCounter > 1000) {                   //
+    if(idleCounter > 1000) {
       sequenceLEDs(1, 100);
       delay(10);
-
-      //      digitalWrite(USBIndicatorLEDPin, HIGH);      //
-      //      delay(250);                               //
-      //      digitalWrite(USBIndicatorLEDPin, LOW);    // 
-      idleCounter = 0;                          //
-    }                                           //
-    else{                                       //
-      digitalWrite(USBIndicatorLEDPin, LOW);    //
-    }                                           //
+      idleCounter = 0;                         
+    }                                          
+    else{                                      
+      digitalWrite(USBIndicatorLEDPin, LOW);   
+    }                                         
     xPosition = panServo_HomePosition;   // keep x axis servo in its home position
     yPosition = tiltServo_HomePosition;    // keep y axis servo in its home position
     fire = 0;                              // don't fire
