@@ -21,7 +21,9 @@ public void retryArduinoConnect() {
     }
     for (i = 0; i < len; i++) {
       println("Testing port " + Serial.list()[i]);
-      arduinoPort = new Serial(this, Serial.list()[i], 4800);    // Open 1st port in list
+      String portName = Serial.list()[i]; //12 FEB
+      arduinoPort = new Serial(this, portName, 4800); //12 FEB
+      //arduinoPort = new Serial(this, Serial.list()[i], 4800);    // Open 1st port in list
       millisStart = millis();
       while ( (millis () - millisStart) < 2000) ;                //wait for USB port reset (Guessed at 3 secs)
       // can't use delay() call in setup()
@@ -31,6 +33,7 @@ public void retryArduinoConnect() {
       while ( (millis () - millisStart) < 100) ;                 //collect some chars
       if (arduinoPort.available() > 0)                           //if we have a character
       {
+        strRange = arduinoPort.readStringUntil('\n');
         char c = arduinoPort.readChar();                         //get the character
         if (c == 'T')                                            //if we got a 'T'
         {

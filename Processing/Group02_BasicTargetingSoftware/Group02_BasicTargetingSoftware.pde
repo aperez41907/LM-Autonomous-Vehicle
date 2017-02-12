@@ -188,11 +188,11 @@ void setup() {
 
   retryArduinoConnect();
   
-  String portName = Serial.list()[0];//alex
+  //String portName = Serial.list()[0];//alex
   //arduinoPort = new Serial(this, portName, 4800);    //adding this line causes the manual comm select to not work
   
-  //test
-  arduinoPort.bufferUntil('\n');
+  //test 12 FEB
+  //arduinoPort.bufferUntil('\n');
   
   xRatio = (camWidth / (xMax - xMin));               // used to allign sights with crosshairs on PC
   yRatio = (camHeight/ (yMax - yMin));
@@ -204,7 +204,7 @@ void draw() {
   if (arduinoPort.available() > 0) {
     strRange = arduinoPort.readStringUntil('\n');
   }*/
-
+  
   if (controlMode) {              // autonomous mode
     autonomousMode();            //
   }
@@ -627,4 +627,46 @@ public void stop() {
   camInput.stop();
   super.stop();
 }
+
+void serialEvent( Serial arduinoPort) {
+  //put the incoming data into a String - 
+  //the '\n' is our end delimiter indicating the end of a complete packet
+  //strRange = arduinoPort.readStringUntil('\n');
+  
+  String temp = arduinoPort.readStringUntil('\n');
+  if (temp != null)
+    strRange = temp;  
+  
+  //make sure our data isn't empty before continuing
+  if (strRange != null) {
+    //trim whitespace and formatting characters (like carriage return)
+    strRange = trim(strRange);
+    //println(strRange);
+    /*
+  
+    //look for our 'A' string to start the handshake
+    //if it's there, clear the buffer, and send a request for data
+    if (firstContact == false) {
+      if (val.equals("A")) {
+        arduinoPort.clear();
+        firstContact = true;
+        arduinoPort.write("A");
+        println("contact");
+      }
+    }
+    else { //if we've already established contact, keep getting and parsing data
+      println(val);
+  
+      if (mousePressed == true) 
+      {                           //if we clicked in the window
+        arduinoPort.write('1');        //send a 1
+        println("1");
+      }
+  
+      // when you've parsed the data you have, ask for more:
+      arduinoPort.write("A");
+      }*/
+    }
+}
+
 
