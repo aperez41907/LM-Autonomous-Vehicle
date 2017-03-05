@@ -175,15 +175,12 @@ void setup(){
   
   Serial.begin(4800);                         // start communication with computer
 
+  // March 3 edit
   myLidarLite.begin(0, true);   // Set configuration to default and I2C to 400 kHz
   myLidarLite.configure(0);
-
 }
 
 void loop() {
-
-  //Serial.println(myLidarLite.distance()*0.0328084); //breaks the code
-  //delay(10);
     
   if (Serial.available() >= 10) {       // check to see if a new set of commands is available
     watchdog = 0;
@@ -205,43 +202,43 @@ void loop() {
       if((int(scanningByte) - 48) == 1) {
         scanning = true;
       }
-      else{
+      else {
         scanning = false;
       }
     }
-    else if(indicator == 'z'){     // check for command to go idle (sent by computer when program is ended)
-      idle = true;
-    }
-    else if(indicator == 'b'){     // start backup
-
-      backup();
-
-    }
-    else if(indicator == 'r'){      // start restore 
-
-      restore();
-
-    }
+    else if (indicator == 'z') {     // check for command to go idle (sent by computer when program is ended)
+      idle = true;  }
+    else if (indicator == 'b') {     // start backup
+      backup();     }
+    else if (indicator == 'r') {      // start restore 
+      restore();    }
   }
-  else{
-    delay(100); // delay added to improve LIDAR-processing response time //2-8
-    Serial.println(myLidarLite.distance()*0.0328084); //breaks the code //LIDAR test February 8th    2-8
+  else {
+    /*---------------------------------- March 5 Edit  --------------------------------*/
+    // according to online forum, no delay is required but data must be sent as bulk?
+    delay(100);         // added to improve LIDAR-processing response time //2-8
+    Serial.println(myLidarLite.distance()*0.0328084); //LIDAR test February 8th    2-8
+    Serial.flush();
+    //Serial.end();       // Ends the serial communication once all data is received
+    //Serial.begin(4800); // Re-establishes serial communication, this causes deletion
+                          // of anything previously stored in the buffer cache
+    /*---------------------------------- March 5 Edit  --------------------------------*/
     watchdog++;
-    if(watchdog > watchdogTimeout) {
+    if (watchdog > watchdogTimeout) {
       idle = true;
     }
   }
-  if(idle) {                          // when Arduino is not getting commands from computer...
-    //Serial.write('T');                // tell the computer that Arduino is here
-    //delay(100); // delay added to improve LIDAR-processing response time
-    //Serial.println(myLidarLite.distance()*0.0328084); //breaks the code //LIDAR test February 8th
-    idleCounter++;                              //  periodically blink the USB indicator LED
-    if(idleCounter > 1000) {
+  
+  if (idle) {                     // when Arduino is not getting commands from computer...
+    // comment out serial.write('t') to get LIDAR to work
+    //Serial.write('T');          // tell the computer that Arduino is here
+    idleCounter++;                //  periodically blink the USB indicator LED
+    if (idleCounter > 1000) {
       sequenceLEDs(1, 100);
       delay(10);
       idleCounter = 0;                         
     }                                          
-    else{                                      
+    else {                                      
       digitalWrite(USBIndicatorLEDPin, LOW);   
     }                                         
     xPosition = panServo_HomePosition;   // keep x axis servo in its home position
@@ -289,14 +286,14 @@ void loop() {
     clipEmpty = false;
   }
 
-
   if(fire == 1 && !clipEmpty) {           // if firing...
     Fire(fireSelector);       // fire the gun in whatever firing mode is selected
-  } 
+  }
   else{                     // if not firing...
     ceaseFire(fireSelector);  // stop firing the gun
   }
-}
+}   // end of "void loop ()"
+
 
 void Fire(int selector) {         // function to fire the gun, based on what firing mode is selected
   if(selector == 1) {
