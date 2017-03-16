@@ -16,6 +16,8 @@
  //   Begin custom values - change these camera dimensions to work with your turret
  //   <===============================================================================================>
 
+// changed to 640x480
+// normally 320x240
 public int camWidth = 320;                   //   camera width (pixels),   usually 160*n
 public int camHeight = 240;                  //   camera height (pixels),  usually 120*n
 
@@ -87,7 +89,10 @@ int oldX = camWidth/2; // smoothing
 int oldY = camHeight/2; // smoothing
 int xdiff; // smoothing
 int ydiff; // smoothing
+
 public float smoothingFactor = 0.8; // smoothing
+public float floatRange = 0;
+
 public boolean activeSmoothing = true;
 
 String strRange;  //LIDAR
@@ -188,11 +193,7 @@ void setup() {
 
   retryArduinoConnect();
   
-  //String portName = Serial.list()[0];//alex
-  //arduinoPort = new Serial(this, portName, 4800);    //adding this line causes the manual comm select to not work
   
-  //test 12 FEB
-  //arduinoPort.bufferUntil('\n');
   
   xRatio = (camWidth / (xMax - xMin));               // used to allign sights with crosshairs on PC
   yRatio = (camHeight/ (yMax - yMin));
@@ -200,10 +201,7 @@ void setup() {
 }
 
 void draw() {
-/*
-  if (arduinoPort.available() > 0) {
-    strRange = arduinoPort.readStringUntil('\n');
-  }*/
+
   
   if (controlMode) {              // autonomous mode
     autonomousMode();            //
@@ -389,9 +387,15 @@ void autonomousMode() {
     possibleY = int(biggestBlob.y * camHeight);
   }
 
-
-  if ((biggestBlobArea >= minBlobArea)) {
-    fire = 1;
+  if (strRange != null) {
+    floatRange = parseFloat(strRange);
+  }
+  if ((biggestBlobArea >= minBlobArea) ) {
+    if(floatRange >= 1 && floatRange < 5) {
+      fire = 1;
+    }else{
+      fire = 0;
+    }
     if (showTargetBox) {
       stroke(255, 50, 50);
       strokeWeight(3);
@@ -516,7 +520,11 @@ void manualMode() {
     }else{    
       displayX = mouseX;
       displayY = mouseY;
-      if (mousePressed) {
+      // mar 10 added conditional items
+      if (strRange != null) {
+        floatRange = parseFloat(strRange);
+      }
+      if (mousePressed && (floatRange >= 1 && floatRange < 5)) {
         fire = 1;
       }
       else {
