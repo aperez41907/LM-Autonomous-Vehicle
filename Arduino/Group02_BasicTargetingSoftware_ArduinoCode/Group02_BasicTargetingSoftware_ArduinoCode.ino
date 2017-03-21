@@ -6,8 +6,8 @@
  
  
 // Set your controller type here
-// type options: "Arduino_bare", "Standalone_v8"
-#define type "Arduino_bare" 
+// type options: "Arduino_Uno", "UCF_Group02_Board_v2"
+#define type "UCF_Group02_Board_v2" 
 
 
 /*
@@ -371,7 +371,7 @@ void sequenceLEDs(int repeats, int delayTime) {
 }
 
 void assignPins() {
-  if(type == "Arduino_bare" || type == "Arduino_Bare") {
+  if(type == "Arduino_Uno" || type == "Arduino_Uno") {
     // pin attachments:
     panServoPin = 8;                        // Arduino pin for pan servo
     tiltServoPin = 9;                       // Arduino pin for tilt servo
@@ -383,7 +383,7 @@ void assignPins() {
     flywheelTriggerPin = 6;
     invertInputs = true;                   // TRUE turns on internal pull-ups, use if closed switch connects arduino pin to ground
   }
-  else if(type == "Standalone_v8") {
+  else if(type == "UCF_Group02_Board_v2") {
     // pin attachments:
     panServoPin = 8;                        // Arduino pin for pan servo
     tiltServoPin = 9;                       // Arduino pin for tilt servo
