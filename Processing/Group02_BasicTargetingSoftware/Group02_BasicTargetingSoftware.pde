@@ -18,8 +18,8 @@
 
 // changed to 640x480
 // normally 320x240
-public int camWidth = 320;                   //   camera width (pixels),   usually 160*n
-public int camHeight = 240;                  //   camera height (pixels),  usually 120*n
+public int camWidth = 320*2;                   //   camera width (pixels),   usually 160*n
+public int camHeight = 240*2;                  //   camera height (pixels),  usually 120*n
 
  //   <===============================================================================================>
  //   End custom values
@@ -391,7 +391,7 @@ void autonomousMode() {
     floatRange = parseFloat(strRange);
   }
   if ((biggestBlobArea >= minBlobArea) ) {
-    if(floatRange >= 1 && floatRange < 5) {
+    if(floatRange >= 0 && floatRange < 30) {
       fire = 1;
     }else{
       fire = 0;
@@ -524,7 +524,7 @@ void manualMode() {
       if (strRange != null) {
         floatRange = parseFloat(strRange);
       }
-      if (mousePressed && (floatRange >= 1 && floatRange < 5)) {
+      if (mousePressed && (floatRange >= 0 && floatRange < 30)) {
         fire = 1;
       }
       else {
