@@ -6,8 +6,8 @@
  
  
 // Set your controller type here
-// type options: "Arduino_Uno", "UCF_Group02_Board_v2"
-#define type "UCF_Group02_Board_v2" 
+// type options: "Arduino_bare", "Standalone_v8"
+#define type "Arduino_bare" 
 
 
 /*
@@ -124,6 +124,10 @@ Servo trigger;                        // trigger servo
 int xPosition;                        // pan position
 int yPosition;                        // tilt position
 int fire = 0;                         // if 1, fire; else, don't fire
+//int fire1 = 0;                        // Alex march 23rd
+
+// lidar distance
+float targetDistance;
 
 int fireTimer = 0;
 int fireSelector = 1;                 //   1 - semi-automatic firing, auto/semi-auto gun
@@ -152,6 +156,7 @@ byte y100byte;
 byte y010byte;
 byte y001byte;
 byte fireByte;
+//byte fire1Byte;                     //Alex march 23rd
 byte fireSelectorByte;
 byte scanningByte;
 
@@ -217,11 +222,12 @@ void loop() {
     /*---------------------------------- March 5 Edit  --------------------------------*/
     // according to online forum, no delay is required but data must be sent as bulk?
     delay(100);         // added to improve LIDAR-processing response time //2-8
-    Serial.println(myLidarLite.distance()*0.0328084); //LIDAR test February 8th    2-8
+    // adding variable to test withholding fire based on range March 10
+    targetDistance = myLidarLite.distance()*0.0328084;
+    // if error, try without %g
+    Serial.println(targetDistance); // Mar 10
+    //Serial.println(myLidarLite.distance()*0.0328084); //LIDAR test February 8th    2-8
     Serial.flush();
-    //Serial.end();       // Ends the serial communication once all data is received
-    //Serial.begin(4800); // Re-establishes serial communication, this causes deletion
-                          // of anything previously stored in the buffer cache
     /*---------------------------------- March 5 Edit  --------------------------------*/
     watchdog++;
     if (watchdog > watchdogTimeout) {
@@ -276,7 +282,22 @@ void loop() {
     digitalWrite(modeIndicatorLEDPin, LOW);
   }
 
-  pan.write(xPosition);        // send the servos to whatever position has been commanded
+  /*
+  // Daniel's code trial  -- start
+  int xPosNew = abs(xPosition - 90);
+  if(xPosition > 90)
+  {
+    xPosNew = xPosition - 2*xPosNew;
+  }
+  else if( xPosition < 90 )
+  {
+    xPosNew = (xPosition + 2*xPosNew) ;
+  }
+  pan.write(xPosNew);
+  // -- end
+  */
+  
+  pan.write(xPosition);        // send the servos to whatever position has been commanded //commented out by Daniel
   tilt.write(yPosition);       //
 
   if(useAmmoCounter && shotCounter >= clipSize) {
@@ -295,15 +316,17 @@ void loop() {
 }   // end of "void loop ()"
 
 
-void Fire(int selector) {         // function to fire the gun, based on what firing mode is selected
+void Fire(int selector) {         
   if(selector == 1) {
     fireTimer++;
-    if(fireTimer >=0 && fireTimer <= triggerTravelMillis) {
+    // added "&& (targetDistance > 1 && targetDistance < 5)" // Mar 10
+    if(fireTimer >=0 && fireTimer <= triggerTravelMillis && 
+      (targetDistance > 1 && targetDistance < 5)){
       digitalWrite(flywheelTriggerPin, HIGH);
-      //delay(2000);
       digitalWrite(electricTriggerPin, HIGH);
       digitalWrite(firingIndicatorLEDPin, HIGH);
     }
+    // function to fire the gun, based on what firing mode is selected
     if(fireTimer > triggerTravelMillis && fireTimer < 1.5*triggerTravelMillis) {
       digitalWrite(electricTriggerPin, LOW);
       digitalWrite(flywheelTriggerPin, LOW);
@@ -316,10 +339,9 @@ void Fire(int selector) {         // function to fire the gun, based on what fir
       }
     }
   }
-  if(selector == 3) {
-    digitalWrite(flywheelTriggerPin, HIGH);
-    //delay(2000);
+  if(selector == 3) {  
     digitalWrite(electricTriggerPin, HIGH);
+    digitalWrite(flywheelTriggerPin, HIGH);
     digitalWrite(firingIndicatorLEDPin, HIGH);
   }  
 }
@@ -332,8 +354,8 @@ void ceaseFire(int selector) {     // function to stop firing the gun, based on 
     digitalWrite(firingIndicatorLEDPin, LOW);
   }
   if(selector == 3) {              // for my gun, both firing modes cease firing by simply shutting off.
-    digitalWrite(electricTriggerPin, LOW);
     digitalWrite(flywheelTriggerPin, LOW);
+    //digitalWrite(electricTriggerPin, LOW);
     digitalWrite(firingIndicatorLEDPin, LOW);
   } 
 }
@@ -371,7 +393,7 @@ void sequenceLEDs(int repeats, int delayTime) {
 }
 
 void assignPins() {
-  if(type == "Arduino_Uno" || type == "Arduino_Uno") {
+  if(type == "Arduino_bare" || type == "Arduino_Bare") {
     // pin attachments:
     panServoPin = 8;                        // Arduino pin for pan servo
     tiltServoPin = 9;                       // Arduino pin for tilt servo
@@ -383,7 +405,7 @@ void assignPins() {
     flywheelTriggerPin = 6;
     invertInputs = true;                   // TRUE turns on internal pull-ups, use if closed switch connects arduino pin to ground
   }
-  else if(type == "UCF_Group02_Board_v2") {
+  else if(type == "Standalone_v8") {
     // pin attachments:
     panServoPin = 8;                        // Arduino pin for pan servo
     tiltServoPin = 9;                       // Arduino pin for tilt servo
