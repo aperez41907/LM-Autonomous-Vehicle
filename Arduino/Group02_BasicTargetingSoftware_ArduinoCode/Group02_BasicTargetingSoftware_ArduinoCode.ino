@@ -5,9 +5,8 @@
  --- Based on Open-Source Material, initiated by Bob Rudolph --- 
 */
 
-// Set your controller type here
-// type options: "Fire_Control_Board", "Standalone_v8"
-#define type "Fire_Control_Board" 
+// type options: "Fire_Control_Board_V3"
+#define type "Fire_Control_Board_V3" 
 
 /*
  ATTACHMENT INSTRUCTIONS: (for using an Arduino board)
@@ -39,7 +38,7 @@
 
 // ammunition magazine/clip settings:
 boolean useAmmoCounter = false;                  // if you want to use the shot counter / clip size feature, set this to true
-int clipSize = 5;                          // how many shots before the gun will be empty and the gun will be disabled (reload switch resets the ammo counter)
+int clipSize = 40;                          // how many shots before the gun will be empty and the gun will be disabled (reload switch resets the ammo counter)
 
 //   <=========================================================================>
 //                      End of custom values
@@ -121,12 +120,13 @@ Servo trigger;                        // trigger servo
 int xPosition;                        // pan position
 int yPosition;                        // tilt position
 int fire = 0;                         // if 1, fire; else, don't fire
-//int fire1 = 0;                        // Alex march 23rd
 
 // LIDAR distance
 float targetDistance;
 
 int fireTimer = 0;
+int revTimer = 0;
+int cooldownTimer;
 int fireSelector = 1;                 //   1 - semi-automatic firing, auto/semi-auto gun
 
 //   3 - full automatic firing, full-auto gun
@@ -153,7 +153,6 @@ byte y100byte;
 byte y010byte;
 byte y001byte;
 byte fireByte;
-//byte fire1Byte;                     //Alex march 23rd
 byte fireSelectorByte;
 byte scanningByte;
 
@@ -299,11 +298,14 @@ void Fire(int selector) {
     }
   }
   if(selector == 3) {
-    //digitalWrite(thermistorPin, HIGH);
-    digitalWrite(flywheel, HIGH); // actually flywheel
-    digitalWrite(ammoBeltFeed, HIGH);
+    revTimer++;
+    cooldownTimer = 30;
+    digitalWrite(flywheel, HIGH);
     digitalWrite(isFiringLED, HIGH);
-  }  
+    if(revTimer >= 30) {
+      digitalWrite(ammoBeltFeed, HIGH);
+    }
+  }
 }
 
 void ceaseFire(int selector) {     // function to stop firing the gun, based on what firing mode is selected
@@ -314,10 +316,13 @@ void ceaseFire(int selector) {     // function to stop firing the gun, based on 
     digitalWrite(isFiringLED, LOW);
   }
   if(selector == 3) {              // for my gun, both firing modes cease firing by simply shutting off.
-    //digitalWrite(thermistorPin, LOW);
+    revTimer = 0;
+    cooldownTimer--;
     digitalWrite(ammoBeltFeed, LOW);
-    //digitalWrite(flywheel, LOW);
-    digitalWrite(isFiringLED, LOW);
+    if(cooldownTimer <= 0) {
+      digitalWrite(flywheel, LOW);
+      digitalWrite(isFiringLED, LOW);
+    }
   } 
 }
 
@@ -354,26 +359,19 @@ void sequenceLEDs(int repeats, int delayTime) {
 }
 
 void assignPins() {
-  if(type == "Fire_Control_Board" || type == "Fire_Control_Board") {
+  if(type == "Fire_Control_Board_V3" || type == "Fire_Control_Board_V3") {
     // pin attachments:
     panServoPin = 8;                        // Arduino pin for pan servo
     tiltServoPin = 9;                       // Arduino pin for tilt servo
     isFiringLED = 12;              // Arduino pin for firing indicator LED
     USBIndicatorLEDPin = 11;                 // Arduino pin for USB indicator LED
     modeIndicatorLEDPin = 13;                // Arduino pin for Mode indicator LED
-    flywheel = 7;                 // Arduino pin for output to trigger MOSFET
+    flywheel = 7;                            // Arduino pin for output to flywheel MOSFET
     ammoBeltFeed = 6;
     invertInputs = true;                   // TRUE turns on internal pull-ups, use if closed switch connects arduino pin to ground
   }
-  else if(type == "Standalone_v8") {
+  else if(type == "Project_Sentry") {
     // pin attachments:
-    panServoPin = 8;                        // Arduino pin for pan servo
-    tiltServoPin = 9;                       // Arduino pin for tilt servo
-    flywheel = 7;                 // Arduino pin for output to trigger MOSFET
-    ammoBeltFeed = 6;
-    isFiringLED = 12;              // Arduino pin for firing indicator LED
     USBIndicatorLEDPin = 14;                 // Arduino pin for USB indicator LED
-    modeIndicatorLEDPin = 13;                // Arduino pin for Mode indicator LED
-    invertInputs = true;                   // TRUE turns on internal pull-ups, use if closed switch connects arduino pin to ground
   }
 }
