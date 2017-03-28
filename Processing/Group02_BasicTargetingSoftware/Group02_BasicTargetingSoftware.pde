@@ -85,12 +85,12 @@ int possibleY = camHeight/2;
 int displayX = camWidth/2;
 int displayY = camHeight/2;
 
-int oldX = camWidth/2; // smoothing
-int oldY = camHeight/2; // smoothing
-int xdiff; // smoothing
-int ydiff; // smoothing
+int oldX = camWidth/2;                // smoothing
+int oldY = camHeight/2;               // smoothing
+int xdiff;                            // smoothing
+int ydiff;                            // smoothing
 
-public float smoothingFactor = 0.8; // smoothing
+public float smoothingFactor = 0.8;    // smoothing
 public float floatRange = 0;
 
 public boolean activeSmoothing = true;
@@ -202,12 +202,11 @@ void setup() {
 
 void draw() {
 
-  
   if (controlMode) {              // autonomous mode
-    autonomousMode();            //
+    autonomousMode();
   }
   else if (!controlMode) {        // manual mode
-    manualMode();                //
+    manualMode();
   }
 
   if (fire == 1) {
@@ -282,12 +281,9 @@ void draw() {
   if (fire == 0)
     strokeWeight(1);
   stroke(0, 255, 0);                     //draw [green] crosshairs
-  noFill();                            // 
-  line(displayX, 0, displayX, camHeight);  //
-  line(0, displayY, camWidth, displayY);   //
-  //ellipse(displayX, displayY, 20, 20);     //
-  //ellipse(displayX, displayY, 28, 22);     //
-  //ellipse(displayX, displayY, 36, 24);     //
+  noFill();
+  line(displayX, 0, displayX, camHeight);
+  line(0, displayY, camWidth, displayY);
 
   updateControlPanels();
   prevTargetX = targetX;
@@ -364,8 +360,6 @@ void autonomousMode() {
     }
   }
 
-
-
   updatePixels();
 
   int biggestBlobArea = 0;
@@ -391,9 +385,12 @@ void autonomousMode() {
     floatRange = parseFloat(strRange);
   }
   if ((biggestBlobArea >= minBlobArea) ) {
+    /*----- Select how far target will be (in feet) -----*/
     if(floatRange >= 0 && floatRange < 30) {
+    /*----- Select how far target will be (in feet) -----*/
       fire = 1;
-    }else{
+    } 
+    else {
       fire = 0;
     }
     if (showTargetBox) {
@@ -524,17 +521,19 @@ void manualMode() {
       if (strRange != null) {
         floatRange = parseFloat(strRange);
       }
+      /*-------- Select how far target will be (in feet) --------*/
       if (mousePressed && (floatRange >= 0 && floatRange < 30)) {
+      /*-------- Select how far target will be (in feet) --------*/
         fire = 1;
       }
       else {
         fire = 0;
       }
     }
-    targetX = constrain(int((displayX/xRatio)+xMin), 0, 180);                 // calculate position to go to based on mouse position
     
-    targetY = constrain(int(((camHeight-displayY)/yRatio)+yMin), 0, 180);     //
-    
+    // calculate position to go to based on mouse position
+    targetX = constrain(int((displayX/xRatio)+xMin), 0, 180);
+    targetY = constrain(int(((camHeight-displayY)/yRatio)+yMin), 0, 180);
   }
 }
 
@@ -602,31 +601,22 @@ void keyReleased() {
   
 }
 
-
-
 public void viewCameraSettings() {
   camInput.settings();
 }
-
 public void setBackground() {
   camInput.adapt();
 }
-
 public void selectColor() {
   selectingColor = true;
 }
-
 public void selectSafeColor() {
   selectingSafeColor = true;
 }
-
 public void radioEffect(int ID) {
   effect = ID + 1;
 }
-
-
 public void stop() {
-
   if (!runWithoutArduino) {
     arduinoPort.write("z0000000");
     delay(500);
@@ -636,6 +626,7 @@ public void stop() {
   super.stop();
 }
 
+/*--------------- UCF Group02 (LM Autonomous Vehicle) Edit ---------------*/
 void serialEvent( Serial arduinoPort) {
   //put the incoming data into a String - 
   //the '\n' is our end delimiter indicating the end of a complete packet
@@ -649,32 +640,6 @@ void serialEvent( Serial arduinoPort) {
   if (strRange != null) {
     //trim whitespace and formatting characters (like carriage return)
     strRange = trim(strRange);
-    //println(strRange);
-    /*
-  
-    //look for our 'A' string to start the handshake
-    //if it's there, clear the buffer, and send a request for data
-    if (firstContact == false) {
-      if (val.equals("A")) {
-        arduinoPort.clear();
-        firstContact = true;
-        arduinoPort.write("A");
-        println("contact");
-      }
-    }
-    else { //if we've already established contact, keep getting and parsing data
-      println(val);
-  
-      if (mousePressed == true) 
-      {                           //if we clicked in the window
-        arduinoPort.write('1');        //send a 1
-        println("1");
-      }
-  
-      // when you've parsed the data you have, ask for more:
-      arduinoPort.write("A");
-      }*/
     }
 }
-
-
+/*--------------- UCF Group02 (LM Autonomous Vehicle) Edit ---------------*/
