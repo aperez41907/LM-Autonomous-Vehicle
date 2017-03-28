@@ -71,12 +71,6 @@ void drawControlPanel() {
   label_fireSelector.setOpaque(false);
   panel_main.add(label_fireSelector);	
 
-  label_scanSelector = new GLabel(this, "Scan When Idle", 310, 575, 150, 20);
-  label_scanSelector.localColor.lblFont = color(0,255,0);
-  label_scanSelector.setBorder(0);
-  label_scanSelector.setOpaque(false);
-  panel_main.add(label_scanSelector);	
-
   label_runWithoutArduino = new GLabel(this, "No Microcontroller", 460, 475, 120, 20);
   label_runWithoutArduino.localColor.lblFont = color(0,255,0);
   label_runWithoutArduino.setBorder(0);
@@ -193,12 +187,6 @@ void drawControlPanel() {
   checkbox_showCameraView.setSelected(showCameraView);
   checkbox_showCameraView.setBorder(0);
   panel_main.add(checkbox_showCameraView);
-
-  checkbox_scanWhenIdle = new GCheckbox(this, "Scan When Idle", 10, 345, 10);
-  checkbox_scanWhenIdle.localColor.cbxFont = color(0,255,0);
-  checkbox_scanWhenIdle.setSelected(scanWhenIdle);
-  checkbox_scanWhenIdle.setBorder(0);
-  panel_main.add(checkbox_scanWhenIdle);
 
   checkbox_activeSmoothing = new GCheckbox(this, "Enable Smoothing", 310, 25, 10);
   checkbox_activeSmoothing.localColor.cbxFont = color(0,255,0);
@@ -479,12 +467,6 @@ public void updateControlPanels() {
     label_runWithoutArduino.setOpaque(true);
     setLabelText(label_runWithoutArduino, "connecting...");
   }
-  if (scanWhenIdle) {
-    setLabelText(label_scanSelector, "Scan When Idle");
-  }
-  else{
-    setLabelText(label_scanSelector, "Don't Scan When Idle");
-  }
   checkbox_controlMode.setSelected(controlMode);
   checkbox_useArrowKeys.setSelected(useArrowKeys);
 }
@@ -640,9 +622,6 @@ public void handleCheckboxEvents(GCheckbox cbox) {
   }
   if (cbox == checkbox_showCameraView) {
     showCameraView = checkbox_showCameraView.isSelected();
-  }
-  if (cbox == checkbox_scanWhenIdle) {
-    scanWhenIdle = checkbox_scanWhenIdle.isSelected();
   }
   if (cbox == checkbox_activeSmoothing) {
     activeSmoothing = checkbox_activeSmoothing.isSelected();
