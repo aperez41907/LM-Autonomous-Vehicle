@@ -29,11 +29,11 @@
 #define panServo_scanningMax 180             // gun to turn while 'scanning'
 #define scanningSpeed 2000                   // total time for 1 sweep (in milliseconds)
 
-#define panServo_HomePosition 97            // 'centered' gun position 
-#define tiltServo_HomePosition 65           //
+#define panServo_HomePosition 95            // 'centered' gun position 
+#define tiltServo_HomePosition 95           //
 
 // more trigger settings:
-#define triggerTravelMillis 1500             // how often should trigger be squeezed (in semi-auto firing)
+#define triggerTravelMillis 15             // how often should trigger be squeezed (in semi-auto firing)
 // higher value = slower firing, lower value = faster firing
 
 // ammunition magazine/clip settings:
@@ -257,7 +257,7 @@ void loop() {
     digitalWrite(modeIndicatorLEDPin, LOW);
   }
 
-
+  yPosition += 8;             // manual adjustments 
   pan.write(xPosition);       // send the servos to whatever position has been commanded
   tilt.write(yPosition);
 
@@ -297,15 +297,26 @@ void Fire(int selector) {
       }
     }
   }
+  /*--------------- UCF Group02 (LM Autonomous Vehicle) Begin Edit ---------------*/
   if(selector == 3) {
     revTimer++;
-    cooldownTimer = 30;
+    cooldownTimer = 20;
     digitalWrite(flywheel, HIGH);
     digitalWrite(isFiringLED, HIGH);
     if(revTimer >= 30) {
+      fireTimer++;
+      if(fireTimer >= 5 && fireTimer <= triggerTravelMillis) {
       digitalWrite(ammoBeltFeed, HIGH);
+      }
+      if(fireTimer > triggerTravelMillis) {
+      digitalWrite(ammoBeltFeed, LOW);
+      }
+      if(fireTimer >= 4*triggerTravelMillis) {
+      fireTimer = 0;
+      }
     }
   }
+  /*--------------- UCF Group02 (LM Autonomous Vehicle) End of Edit ---------------*/
 }
 
 void ceaseFire(int selector) {     // function to stop firing the gun, based on what firing mode is selected
@@ -315,6 +326,7 @@ void ceaseFire(int selector) {     // function to stop firing the gun, based on 
     digitalWrite(ammoBeltFeed, LOW);
     digitalWrite(isFiringLED, LOW);
   }
+  /*--------------- UCF Group02 (LM Autonomous Vehicle) Begin Edit ---------------*/
   if(selector == 3) {              // for my gun, both firing modes cease firing by simply shutting off.
     revTimer = 0;
     cooldownTimer--;
@@ -323,7 +335,8 @@ void ceaseFire(int selector) {     // function to stop firing the gun, based on 
       digitalWrite(flywheel, LOW);
       digitalWrite(isFiringLED, LOW);
     }
-  } 
+  }
+  /*--------------- UCF Group02 (LM Autonomous Vehicle) End of Edit ---------------*/
 }
 
 void sequenceLEDs(int repeats, int delayTime) {
