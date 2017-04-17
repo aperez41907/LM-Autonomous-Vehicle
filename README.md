@@ -6,4 +6,4 @@ The primary requirement for the ECE group is to manufacture a custom printed cir
 
 This repository contains the Basic Targeting Software (under development as of January 2017) that the ECE students will integrate into the custom mobile targeting system for faculty review.
 
-Link to 2017 ECE CDR: https://1drv.ms/p/s!AtcPn9cnqqIngZNVEjDnodzNE6HdRg
+Link to 2017 EE/CPE Final Presentation: https://docs.google.com/presentation/d/1dtFLOHydZ_TX6q0tCO_sC6u3nBcdjx9LQCrVHr5ozWU/edit?usp=sharing
