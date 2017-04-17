@@ -1,4 +1,4 @@
-/*
+ /*
  --------- UCF ECE Group 2: Basic Targeting Software  ----------
  ===============================================================
  --- Based on Open-Source Material, initiated by Bob Rudolph ---
@@ -8,7 +8,6 @@
  hold 'r' and click+drag to form a rectangle  "fire-restricted" zone
  press SPACEBAR to toggle manual/autonomous modes
  press SHIFT to toggle arrow-key aiming in manual mode
- 
  */
 
 
@@ -71,7 +70,9 @@ int[] screenPixels;
 public int range = 0;
 public int targetX = camWidth/2;
 public int targetY = camHeight/2;
+
 int fire = 0;
+
 int[] prevFire = {
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 };
@@ -386,7 +387,7 @@ void autonomousMode() {
   }
   if ((biggestBlobArea >= minBlobArea) ) {
     /*----- Select how far target will be (in feet) -----*/
-    if(floatRange >= 0 && floatRange < 30) {
+    if(floatRange >= 3 && floatRange < 40) {
     /*----- Select how far target will be (in feet) -----*/
       fire = 1;
     } 
